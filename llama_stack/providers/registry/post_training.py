@@ -22,4 +22,15 @@ def available_providers() -> List[ProviderSpec]:
                 Api.datasets,
             ],
         ),
+        InlineProviderSpec(
+            api=Api.post_training,
+            provider_type="inline::ilab",
+            pip_packages=["torch", "numpy"],
+            module="llama_stack.providers.inline.post_training.ilab",
+            config_class="llama_stack.providers.inline.post_training.ilab.ilabPostTrainingConfig",
+            api_dependencies=[
+                Api.datasetio,
+                Api.datasets,
+            ],
+        ),
     ]

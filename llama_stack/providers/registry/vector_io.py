@@ -29,7 +29,7 @@ def available_providers() -> List[ProviderSpec]:
         InlineProviderSpec(
             api=Api.vector_io,
             provider_type="inline::faiss",
-            pip_packages=["faiss-cpu"],
+            pip_packages=["faiss-cpu", "chardet"],
             module="llama_stack.providers.inline.vector_io.faiss",
             config_class="llama_stack.providers.inline.vector_io.faiss.FaissVectorIOConfig",
             api_dependencies=[Api.inference],
@@ -39,7 +39,7 @@ def available_providers() -> List[ProviderSpec]:
         InlineProviderSpec(
             api=Api.vector_io,
             provider_type="inline::sqlite-vec",
-            pip_packages=["sqlite-vec"],
+            pip_packages=["sqlite-vec", "chardet", "pypdf"],
             module="llama_stack.providers.inline.vector_io.sqlite_vec",
             config_class="llama_stack.providers.inline.vector_io.sqlite_vec.SQLiteVectorIOConfig",
             api_dependencies=[Api.inference],

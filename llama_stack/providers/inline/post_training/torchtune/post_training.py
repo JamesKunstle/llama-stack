@@ -56,6 +56,9 @@ class TorchtunePostTrainingImpl:
         checkpoint_dir: Optional[str],
         algorithm_config: Optional[AlgorithmConfig],
     ) -> PostTrainingJob:
+        
+        # NOTE: sets up bookkeeping in impl object
+
         if job_uuid in self.jobs:
             raise ValueError(f"Job {job_uuid} already exists")
 
@@ -70,6 +73,8 @@ class TorchtunePostTrainingImpl:
 
         if isinstance(algorithm_config, LoraFinetuningConfig):
             try:
+
+                # JK NOTE: instantiate impl distro
                 recipe = LoraFinetuningSingleDevice(
                     self.config,
                     job_uuid,
@@ -86,9 +91,13 @@ class TorchtunePostTrainingImpl:
                 job_status_response.status = JobStatus.in_progress
                 job_status_response.started_at = datetime.now()
 
+                # JK NOTE: setup training (blocking)
                 await recipe.setup()
+
+                # JK NOTE: train (blocking)
                 resources_allocated, checkpoints = await recipe.train()
 
+                # JK NOTE: finish bookkeeping
                 self.checkpoints_dict[job_uuid] = checkpoints
                 job_status_response.resources_allocated = resources_allocated
                 job_status_response.checkpoints = checkpoints
@@ -101,6 +110,7 @@ class TorchtunePostTrainingImpl:
         else:
             raise NotImplementedError()
 
+        # JK NOTE: return response
         return post_training_job
 
     async def preference_optimize(
