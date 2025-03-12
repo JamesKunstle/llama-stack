@@ -139,6 +139,7 @@ class PostTrainingRLHFRequest(BaseModel):
 
 class PostTrainingJob(BaseModel):
     job_uuid: str
+    current_status: JobStatus
 
 
 @json_schema_type
@@ -146,7 +147,9 @@ class PostTrainingJobStatusResponse(BaseModel):
     """Status of a finetuning job."""
 
     job_uuid: str
-    status: JobStatus
+    status: str
+    subprocess_running: bool
+    subrocess_return_code: int | None = None
 
     scheduled_at: Optional[datetime] = None
     started_at: Optional[datetime] = None
